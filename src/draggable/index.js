@@ -1,35 +1,54 @@
 const draggable = {
-  inserted: function (el) {
+  bind(el) {
     el.style.position = 'fixed'
-    el.onmousedown = function (e) {
-      let disx = e.pageX - el.getBoundingClientRect().left
-      let disy = e.pageY - el.getBoundingClientRect().top
-      document.onmousemove = function (e) {
-        el.style.cursor = 'move'
-        let x = e.pageX - disx
-        let y = e.pageY - disy
-        let maxX = document.body.clientWidth - el.offsetWidth
-        let maxY = document.body.clientHeight - el.offsetHeight
-        if (x < 0) {
-          x = 0
-        } else if (x > maxX) {
-          x = maxX
-        }
+    el.style.cursor = 'pointer'
+    let disx = el.getBoundingClientRect().left
+    let disy = el.getBoundingClientRect().top
+    let x = 0
+    let y = 0
+    const maxX = document.body.clientWidth - el.offsetWidth
+    const maxY = document.body.clientHeight - el.offsetHeight
 
-        if (y < 0) {
-          y = 0
-        } else if (y > maxY) {
-          y = maxY
-        }
-
-        el.style.left = x + 'px'
-        el.style.top = y + 'px'
-      }
-      document.onmouseup = function () {
-        el.style.cursor = 'auto'
-        document.onmousemove = document.onmouseup = null
-      }
+    el.$handleMousedown = (e) => {
+      disx = e.pageX - x
+      disy = e.pageY - y
+      document.addEventListener('mousemove', handleMousemove)
+      document.addEventListener('mouseup', handleMouseup)
     }
+
+    function handleMousemove(e) {
+      el.style.cursor = 'move'
+      x = e.pageX - disx
+      y = e.pageY - disy
+      if (x < 0)
+        x = 0
+
+      else if (x > maxX)
+        x = maxX
+
+      if (y < 0)
+        y = 0
+
+      else if (y > maxY)
+        y = maxY
+
+      requestAnimationFrame(() => {
+        el.style.left = `${x}px`
+        el.style.top = `${y}px`
+      })
+    }
+
+    function handleMouseup() {
+      el.style.cursor = 'pointer'
+      document.removeEventListener('mousemove', handleMousemove)
+      document.removeEventListener('mouseup', handleMouseup)
+    }
+
+    el.addEventListener('mousedown', el.$handleMousedown)
+  },
+  unbind(el) {
+    el.removeEventListener('mousedown', el.$handleMousedown)
   },
 }
+
 export default draggable

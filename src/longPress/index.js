@@ -1,49 +1,36 @@
 const longpress = {
-  bind: function (el, binding) {
-    if (typeof binding.value !== 'function') {
-      throw 'callback must be a function'
+  bind(el, binding) {
+    if (typeof binding.value !== 'function')
+      throw new Error('callback must be a function')
+
+    const delay = binding.arg ? +binding.arg : 500
+
+    let pressTimer
+
+    el.$start = () => {
+      pressTimer = setTimeout(() => {
+        binding.value()
+      }, delay)
     }
-    // 定义变量
-    el.$arg = binding.arg ? +binding.arg : 2000
-    let pressTimer = null
-    // 创建计时器（ 2秒后执行函数 ）
-    const start = function (e) {
-      if (e.type === 'click' && e.button !== 0) {
-        return
-      }
-      if (pressTimer === null) {
-        pressTimer = setTimeout(() => {
-          handler()
-        }, this.$arg)
-      }
+
+    el.$cancel = () => {
+      clearTimeout(pressTimer)
     }
-    // 取消计时器
-    const cancel = function () {
-      if (pressTimer !== null) {
-        clearTimeout(pressTimer)
-        pressTimer = null
-      }
-    }
-    // 运行函数
-    const handler = e => {
-      binding.value(e)
-    }
-    // 添加事件监听器
-    el.addEventListener('mousedown', start)
-    el.addEventListener('touchstart', start)
-    // 取消计时器
-    el.addEventListener('click', cancel)
-    el.addEventListener('mouseout', cancel)
-    el.addEventListener('touchend', cancel)
-    el.addEventListener('touchcancel', cancel)
+
+    // 添加触摸事件的监听器
+    el.addEventListener('touchstart', el.$start)
+    el.addEventListener('touchend', el.$cancel)
+
+    // 添加鼠标事件的监听器
+    el.addEventListener('mousedown', el.$start)
+    el.addEventListener('mouseup', el.$cancel)
   },
-  // 当传进来的值更新的时候触发
-  componentUpdated(el, { value }) {
-    el.$value = value
-  },
-  // 指令与元素解绑的时候，移除事件绑定
   unbind(el) {
-    el.removeEventListener('click', el.handler)
+    // 解绑所有事件监听器
+    el.removeEventListener('touchstart', el.$start)
+    el.removeEventListener('touchend', el.$cancel)
+    el.removeEventListener('mousedown', el.$start)
+    el.removeEventListener('mouseup', el.$cancel)
   },
 }
 
