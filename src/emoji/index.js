@@ -1,29 +1,29 @@
-const findEle = (parent, type) => {
+function findEle(parent, type) {
   return parent.tagName.toLowerCase() === type ? parent : parent.querySelector(type)
 }
 
-const trigger = (el, type) => {
+function trigger(el, type) {
   const e = document.createEvent('HTMLEvents')
   e.initEvent(type, true, true)
   el.dispatchEvent(e)
 }
 
 const emoji = {
-  bind: function (el, binding) {
-    const regRule =
-      binding.value || /[^\u4E00-\u9FA5|\d|a-zA-Z|\r\n\s,.?!，。？！…—&$=()-+/*{}[\]]|\s/g
-    let $inp = findEle(el, 'input')
-    el.$inp = $inp
-    $inp.handle = function () {
-      let val = $inp.value
-      $inp.value = val.replace(regRule, '')
+  bind(el, binding) {
+    const regRule = binding.value || /[^\u4E00-\u9FA5|\d|a-zA-Z|\r\n\s,.?!，。？！…—&$=()-+/*{}[\]]|\s/g
+    const inpEl = findEle(el, 'input')
 
-      trigger($inp, 'input')
+    inpEl.$handleReplace = function () {
+      const val = inpEl.value
+      inpEl.value = val.replace(regRule, '')
+      trigger(inpEl, 'input')
     }
-    $inp.addEventListener('keyup', $inp.handle)
+    inpEl.addEventListener('keyup', inpEl.$handleReplace)
+
+    el.$inpEl = inpEl
   },
-  unbind: function (el) {
-    el.$inp.removeEventListener('keyup', el.$inp.handle)
+  unbind(el) {
+    el.$inpEl.removeEventListener('keyup', el.$inpEl.$handleReplace)
   },
 }
 

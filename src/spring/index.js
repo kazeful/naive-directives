@@ -1,8 +1,6 @@
 import CssRender from 'css-render'
 
-const {
-  c,
-} = CssRender()
+const { c } = CssRender()
 
 const style = c([
   c('.scale-down-center', {
@@ -28,13 +26,13 @@ export default {
     const eventType = binding.modifiers.dblclick ? 'dblclick' : 'click'
     el.addEventListener(eventType, handler)
     function handler() {
-      if (el.__springTimer__)
+      if (el.$springTimer)
         return
       el.classList.add('scale-down-center')
-      el.__springTimer__ = setTimeout(() => {
+      el.$springTimer = setTimeout(() => {
         const className = Array.prototype.at.call(el.classList, -1)
         el.classList.remove(className)
-        el.__springTimer__ = null
+        el.$springTimer = null
       }, 400)
     }
   },

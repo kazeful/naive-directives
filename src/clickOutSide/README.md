@@ -1,9 +1,10 @@
+# Extended clickOutside directive
 ```html
-<div v-clickOutSide="handle"></div>
+<div v-clickOutside="handleclickOutside"></div>
 
-<div v-clickOutside:exactAreaClassName="handleclickOutside">
+<div v-clickOutside:limitAreaClassName="handleclickOutside">
     Parent
-    <div class="exactAreaClassName">A</div>
-    <div class="exactAreaClassName">B</div>
+    <div class="limitAreaClassName">A</div>
+    <div class="limitAreaClassName">B</div>
 </div>
 ```

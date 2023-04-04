@@ -5,12 +5,12 @@ const resize = {
     if (typeof binding.value !== 'function')
       throw new Error('callback must be a function')
 
-    el.__handleResize__ = binding.value
-    addResizeListener(el, el.__handleResize__)
+    el.$handleResize = binding.value
+    addResizeListener(el, el.$handleResize)
   },
   handleRemoveListener(el) {
-    if (el.__handleResize__)
-      removeResizeListener(el, el.__handleResize__)
+    if (el.$handleResize)
+      removeResizeListener(el, el.$handleResize)
   },
 }
 
