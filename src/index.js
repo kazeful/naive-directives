@@ -9,9 +9,6 @@ import copy from './copy'
 
 // import draggable from './draggable'
 
-// 限制表单输入 比如不能输入表情和特殊字符 只能输入数字或字母等
-import emoji from './emoji'
-
 // 元素点击范围扩展指令
 import expandClick from './expandClick'
 
@@ -34,7 +31,6 @@ const directives = {
   clickOutside,
   color,
   expandClick,
-  emoji,
   longPress,
   spring,
   waterMarker,
@@ -55,7 +51,6 @@ export {
   color,
   copy, // extra
   expandClick,
-  emoji,
   longPress,
   spring,
   tooltip, // extra

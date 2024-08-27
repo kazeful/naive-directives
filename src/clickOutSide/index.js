@@ -36,10 +36,11 @@ function createDocumentHandler(el, binding, vnode) {
       || !mouseup.target
       || !mousedown.target
       || (vnode.context.popperElm
-        && (vnode.context.popperElm.contains(mouseup.target)
-          || vnode.context.popperElm.contains(mousedown.target)))
-    )
+      && (vnode.context.popperElm.contains(mouseup.target)
+      || vnode.context.popperElm.contains(mousedown.target)))
+    ) {
       return
+    }
     const limitElms = hasLimit(el, el[ctx].limitArea)
     // 如果是有特殊限定范围的，则进行判断当前点击是否在 限定范围内
     if (limitElms) {
@@ -59,9 +60,12 @@ function createDocumentHandler(el, binding, vnode) {
       binding.expression
       && el[ctx].methodName
       && vnode.context[el[ctx].methodName]
-    )
+    ) {
       vnode.context[el[ctx].methodName]()
-    else el[ctx].bindingFn && el[ctx].bindingFn()
+    }
+    else {
+      el[ctx].bindingFn && el[ctx].bindingFn()
+    }
   }
 }
 

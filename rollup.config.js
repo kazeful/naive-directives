@@ -5,8 +5,9 @@ import commonjs from '@rollup/plugin-commonjs'
 import postcss from 'rollup-plugin-postcss'
 import autoprefixer from 'autoprefixer'
 import cssnano from 'cssnano'
-import buble from '@rollup/plugin-buble'
+import { babel } from '@rollup/plugin-babel'
 // import { terser } from 'rollup-plugin-terser'
+import pkg from './package.json'
 
 const config = {
   input: 'src/index.js',
@@ -18,19 +19,17 @@ const config = {
       plugins: [autoprefixer(), cssnano()],
       extract: path.resolve('dist/style.css'),
     }),
-    buble(),
+    babel({ babelHelpers: 'bundled' }),
   ],
   output: [
     {
-      file: 'dist/index.cjs.js',
-      format: 'cjs',
-      exports: 'named',
+      file: pkg.module,
+      format: 'es',
       sourcemap: true,
     },
     // {
-    //   file: 'dist/index.cjs.min.js',
-    //   format: 'cjs',
-    //   exports: 'named',
+    //   file: 'dist/index.esm.min.js',
+    //   format: 'es',
     //   plugins: [
     //     terser({
     //       format: {
@@ -40,13 +39,13 @@ const config = {
     //   ],
     // },
     {
-      file: 'dist/index.esm.js',
-      format: 'es',
+      file: 'dist/index.cjs',
+      format: 'cjs',
       sourcemap: true,
     },
     // {
-    //   file: 'dist/index.esm.min.js',
-    //   format: 'es',
+    //   file: 'dist/index.cjs.min.js',
+    //   format: 'cjs',
     //   plugins: [
     //     terser({
     //       format: {

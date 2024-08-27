@@ -1,7 +1,7 @@
 ```html
 <!-- 为div设置水印  -->
 <div
-  v-waterMarker="{ 
+  v-waterMarker="{
     <!-- 水印字 -->
     text: '送你一朵小红花',
     <!-- 字体 -->
